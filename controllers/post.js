@@ -69,7 +69,6 @@ export const getUserPosts = async (req, res) => {
         res.status(200).json(post);
 
     } catch (err) {
-        s
         res.status(400).json({ message: err.message });
     }
 }
@@ -135,8 +134,6 @@ export const commentUpdate = async (req, res) => {
 
         await Post.updateOne(
             {
-                "_id": postId,
-                "comments.userId": userId,
                 "comments._id": cmtId
             },
             {
@@ -173,7 +170,15 @@ export const removePost = async (req, res) => {
 
         await Post.findByIdAndDelete(postId);
         const post = await Post.find().sort({ 'updatedAt': -1, 'createdAt': - 1 }).lean();;
-
+        const updatedUser = await User.updateMany(
+            { "savePosts": postId },
+            {
+                $pull: {
+                    "savePosts": postId
+                }
+            }
+        )
+        console.log(updatedUser);
         res.status(200).json(post);
 
     } catch (err) {

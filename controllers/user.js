@@ -1,5 +1,4 @@
 import User from "../models/User.js";
-import bcrypt from "bcrypt";
 import Post from "../models/Post.js";
 
 
@@ -37,35 +36,22 @@ export const getUserFriends = async (req, res) => {
 
 
 // UPDATE
-export const AddRemoveFriend = async (req, res) => {
+export const AddRemoveSavedPost = async (req, res) => {
     try {
-        const { id, friendId } = req.params;
-        const user = await User.findById(id);
-        const userFriend = await User.findById(friendId);
+        const { userId, postId } = req.params;
+        const user = await User.findById(userId);
+        const post = await User.findById(postId);
 
-        if (user.friends.includes(friendId)) {
-            user.friends = user.friends.filter((id) => id !== friendId);
-            userFriend.friends = userFriend.friends.filter((id) => id !== id);
+
+        if (user.savePosts.includes(postId)) {
+            user.savePosts = user.savePosts.filter((id) => id !== postId);
         }
         else {
-            user.friends.push(friendId);
-            userFriend.friends.push(id);
+            user.savePosts.push(postId);
         }
 
-        await user.save();
-        await userFriend.save();
-
-        const friends = await Promise.all(
-            user.friends.map((id) => User.findById(id))
-        );
-        const formattedFriends = friends.map(
-            ({ _id, userName, profession, picturePath }) => {
-                return ({ _id, userName, profession, picturePath });
-            });
-
-        console.log(formattedFriends);
-
-        res.status(200).json(formattedFriends);
+        const savePost = await user.save();
+        res.status(200).json(savePost);
 
     } catch (err) {
         res.status(400).json({ message: err.message });
@@ -75,7 +61,7 @@ export const AddRemoveFriend = async (req, res) => {
 export const updateUser = async (req, res) => {
     try {
         const { userId } = req.params;
-        const { userName, location, profession, gender, picturePath, about, phoneNo } = req.body;
+        const { userName, location, profession, gender, picturePath, about, phoneNo, facebookId, instagramId, linkedinId, githubId } = req.body;
 
         const user = await User.findById(userId);
         if (!user) return res.status(400);
@@ -91,6 +77,10 @@ export const updateUser = async (req, res) => {
                 profession: profession,
                 gender: gender,
                 about: about,
+                facebookId: facebookId,
+                instagramId: instagramId,
+                linkedinId: linkedinId,
+                githubId: githubId
             },
             { new: true }
         );
@@ -101,10 +91,9 @@ export const updateUser = async (req, res) => {
             },
             { new: true }
         );
-
-        const postUserUpdate = await Post.updateMany(
+        await Post.updateMany(
             {
-                "comments.userId": userId
+                comments: { $elemMatch: { userId: userId } }
             },
             {
                 $set: {
@@ -113,7 +102,7 @@ export const updateUser = async (req, res) => {
             },
             { new: true }
         );
-        console.log(postUserUpdate)
+
         res.status(200).json(updateUser);
 
     } catch (err) {

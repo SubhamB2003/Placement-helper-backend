@@ -6,7 +6,7 @@ import User from "../models/User.js";
 // REGISTER
 export const Register = async (req, res) => {
     try {
-        const { userName, email, password, location, profession, gender, picturePath, friends, about, phoneNo } = req.body;
+        const { userName, email, password, location, profession, gender, picturePath, friends, about, phoneNo, facebookId, instagramId, linkedinId, githubId } = req.body;
 
         const userExist = await User.findOne({ email: email });
 
@@ -27,7 +27,11 @@ export const Register = async (req, res) => {
             picturePath,
             friends,
             phoneNo,
-            about
+            about,
+            facebookId,
+            instagramId,
+            linkedinId,
+            githubId
         });
 
         const saveUser = await newUser.save();

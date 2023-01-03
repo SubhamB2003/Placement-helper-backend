@@ -2,7 +2,7 @@ import express from "express";
 import {
     getUser,
     getUserFriends,
-    AddRemoveFriend
+    AddRemoveSavedPost
 } from "../controllers/user.js";
 
 
@@ -13,6 +13,6 @@ router.get("/:id", getUser);
 router.get("/:id/friends", getUserFriends);
 
 /* UPDATE */
-router.patch("/:id/:friendId", AddRemoveFriend);
+router.patch("/:userId/:postId", AddRemoveSavedPost);
 
 export default router;

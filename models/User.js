@@ -36,7 +36,11 @@ const userSchema = mongoose.Schema({
         required: true,
     },
     about: String,
-    friends: {
+    facebookId: String,
+    instagramId: String,
+    linkedinId: String,
+    githubId: String,
+    savePosts: {
         type: Array,
         default: []
     }

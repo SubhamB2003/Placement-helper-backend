@@ -169,8 +169,8 @@ export const removePost = async (req, res) => {
         if (!currPost) return res.status(400).json({ message: "Does't found any post." });
 
         await Post.findByIdAndDelete(postId);
-        const post = await Post.find().sort({ 'updatedAt': -1, 'createdAt': - 1 }).lean();;
-        const updatedUser = await User.updateMany(
+        const post = await Post.find().sort({ 'updatedAt': -1, 'createdAt': - 1 }).lean();
+        await User.updateMany(
             { "savePosts": postId },
             {
                 $pull: {
@@ -178,7 +178,7 @@ export const removePost = async (req, res) => {
                 }
             }
         )
-        console.log(updatedUser);
+
         res.status(200).json(post);
 
     } catch (err) {

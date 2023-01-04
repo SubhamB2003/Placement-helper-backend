@@ -76,6 +76,19 @@ export const getUserPosts = async (req, res) => {
     }
 }
 
+export const sharePost = async (req, res) => {
+    try {
+
+        const { postId } = req.params;
+        const post = await Post.findById(postId);
+        res.status(200).json(post);
+
+    } catch (err) {
+        res.status(400).json({ message: err.message });
+    }
+}
+
+
 
 // UPDATE
 export const AddRemoveLike = async (req, res) => {

@@ -2,7 +2,7 @@ import express from "express";
 import {
     createComment, removeComment,
     removePost, getFeedPosts, getUserPosts,
-    AddRemoveLike, postUpdate, commentUpdate
+    AddRemoveLike, postUpdate, commentUpdate, sharePost
 } from "../controllers/post.js";
 
 const router = express.Router();
@@ -10,9 +10,12 @@ const router = express.Router();
 // CREATE
 router.post("/comment", createComment);
 
+
 // READ
 router.get("/", getFeedPosts);
 router.get("/:userId/posts", getUserPosts);
+router.get("/:postId", sharePost);
+
 
 // UPDATE
 router.patch("/", postUpdate);

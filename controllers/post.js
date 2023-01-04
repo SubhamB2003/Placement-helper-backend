@@ -1,3 +1,6 @@
+import fs from "fs";
+import path from "path";
+
 import Post from "../models/Post.js";
 import User from "../models/User.js";
 
@@ -165,6 +168,7 @@ export const removePost = async (req, res) => {
         const { postId } = req.params;
 
         const currPost = await Post.findById(postId);
+        const pictureName = currPost.picturePath;
 
         if (!currPost) return res.status(400).json({ message: "Does't found any post." });
 
@@ -180,6 +184,10 @@ export const removePost = async (req, res) => {
         )
 
         res.status(200).json(post);
+
+        if (pictureName && fs.existsSync(path.resolve("F:/PERSONAL/Projects/PlacementHelper/server/public/assets/", pictureName))) {
+            fs.unlinkSync(path.resolve("F:/PERSONAL/Projects/PlacementHelper/server/public/assets/", pictureName));
+        }
 
     } catch (err) {
         res.status(400).json({ message: err.message });

@@ -1,3 +1,6 @@
+import fs from "fs";
+import path from "path";
+
 import User from "../models/User.js";
 import Post from "../models/Post.js";
 
@@ -64,8 +67,8 @@ export const updateUser = async (req, res) => {
         const { userName, location, profession, gender, picturePath, about, phoneNo, facebookId, instagramId, linkedinId, githubId } = req.body;
 
         const user = await User.findById(userId);
+        const pictureName = user.picturePath;
         if (!user) return res.status(400);
-
 
         const updateUser = await User.findByIdAndUpdate(
             userId,
@@ -102,8 +105,11 @@ export const updateUser = async (req, res) => {
             },
             { new: true }
         );
-
         res.status(200).json(updateUser);
+
+        if (pictureName && fs.existsSync(path.resolve("F:/PERSONAL/Projects/PlacementHelper/server/public/assets/", pictureName))) {
+            fs.unlinkSync(path.resolve("F:/PERSONAL/Projects/PlacementHelper/server/public/assets/", pictureName));
+        }
 
     } catch (err) {
         res.status(400).json({ message: err.message });

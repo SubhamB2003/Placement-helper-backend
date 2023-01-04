@@ -5,7 +5,7 @@ import User from "../models/User.js";
 import Post from "../models/Post.js";
 
 
-// READ (PROFILE, USER FRIENDS)
+// READ (PROFILE, SEARCH BAR)
 export const getUser = async (req, res) => {
     try {
         const { id } = req.params;
@@ -37,6 +37,24 @@ export const getUserFriends = async (req, res) => {
     }
 }
 
+export const getAllUser = async (req, res) => {
+    try {
+        const user = await User.find();
+
+        const formattedSavePosts = user.map(
+            ({ _id, userName, profession, location, picturePath }) => {
+                return { _id, userName, profession, profession, location, picturePath };
+            }
+        );
+        console.log(formattedSavePosts);
+        res.status(200).json(formattedSavePosts);
+
+    } catch (err) {
+        res.status(400).json({ "message": err.message });
+    }
+}
+
+
 
 // UPDATE
 export const AddRemoveSavedPost = async (req, res) => {
@@ -64,7 +82,7 @@ export const AddRemoveSavedPost = async (req, res) => {
 export const updateUser = async (req, res) => {
     try {
         const { userId } = req.params;
-        const { userName, location, profession, gender, picturePath, about, phoneNo, facebookId, instagramId, linkedinId, githubId } = req.body;
+        const { userName, location, profession, gender, picturePath, about, graduateYear, phoneNo, facebookId, instagramId, linkedinId, githubId } = req.body;
 
         const user = await User.findById(userId);
         const pictureName = user.picturePath;
@@ -85,6 +103,7 @@ export const updateUser = async (req, res) => {
                 profession: profession,
                 gender: gender,
                 about: about,
+                graduateYear: graduateYear,
                 facebookId: facebookId,
                 instagramId: instagramId,
                 linkedinId: linkedinId,

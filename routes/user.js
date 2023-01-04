@@ -2,13 +2,15 @@ import express from "express";
 import {
     getUser,
     getUserFriends,
-    AddRemoveSavedPost
+    AddRemoveSavedPost,
+    getAllUser
 } from "../controllers/user.js";
 
 
 const router = express.Router();
 
 /* READ */
+router.get("/", getAllUser);
 router.get("/:id", getUser);
 router.get("/:id/friends", getUserFriends);
 

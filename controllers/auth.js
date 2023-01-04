@@ -6,7 +6,7 @@ import User from "../models/User.js";
 // REGISTER
 export const Register = async (req, res) => {
     try {
-        const { userName, email, password, location, profession, gender, picturePath, friends, about, phoneNo, facebookId, instagramId, linkedinId, githubId } = req.body;
+        const { userName, email, password, location, profession, gender, picturePath, about, graduateYear, phoneNo, facebookId, instagramId, linkedinId, githubId } = req.body;
 
         const userExist = await User.findOne({ email: email });
 
@@ -25,8 +25,8 @@ export const Register = async (req, res) => {
             profession,
             gender,
             picturePath,
-            friends,
             phoneNo,
+            graduateYear,
             about,
             facebookId,
             instagramId,

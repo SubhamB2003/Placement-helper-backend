@@ -35,6 +35,10 @@ const userSchema = mongoose.Schema({
         type: String,
         required: true,
     },
+    graduateYear: {
+        type: String,
+        required: true,
+    },
     about: String,
     facebookId: String,
     instagramId: String,

@@ -42,11 +42,10 @@ export const getAllUser = async (req, res) => {
         const user = await User.find();
 
         const formattedSavePosts = user.map(
-            ({ _id, userName, profession, location, picturePath }) => {
-                return { _id, userName, profession, profession, location, picturePath };
+            ({ _id, userName, profession, picturePath }) => {
+                return { _id, userName, profession, picturePath };
             }
         );
-        console.log(formattedSavePosts);
         res.status(200).json(formattedSavePosts);
 
     } catch (err) {
